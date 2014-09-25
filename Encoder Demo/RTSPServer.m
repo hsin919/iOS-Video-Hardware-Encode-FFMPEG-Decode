@@ -72,6 +72,7 @@ static void onSocket (
     memset(&info, 0, sizeof(info));
     info.info = (void*)CFBridgingRetain(self);
     
+    // 在這邊等著接收 client 的 rtsp:// request  等到了以後  再個別建立tcp socket 接著建立udp socket
     _listener = CFSocketCreate(nil, PF_INET, SOCK_STREAM, IPPROTO_TCP, kCFSocketAcceptCallBack, onSocket, &info);
     
     // must set SO_REUSEADDR in case a client is still holding this address
