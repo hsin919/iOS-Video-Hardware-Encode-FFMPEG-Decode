@@ -496,6 +496,10 @@ static unsigned int to_host(unsigned char* p)
 {
     int poc = 0;
     // Picture order count poc 越高的越應該早送出去  既使timestamp比人家後面
+//    NAL_PRIORITY_DISPOSABLE = 0
+//    NAL_PRIORITY_LOW        = 1
+//    NAL_PRIORITY_HIGH       = 2
+//    NAL_PRIORITY_HIGHEST    = 3
     for (NSData* d in _pendingNALU)
     {
         NALUnit nal((const BYTE*)[d bytes], (int)[d length]);
