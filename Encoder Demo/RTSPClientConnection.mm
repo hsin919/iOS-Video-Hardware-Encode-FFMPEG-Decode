@@ -134,6 +134,7 @@ static void onSocket (
                void *info
                )
 {
+    // 接收到client sdp等資料
     RTSPClientConnection* conn = (__bridge RTSPClientConnection*)info;
     switch (callbackType)
     {
@@ -188,6 +189,7 @@ static void onRTCP(CFSocketRef s,
     memset(&info, 0, sizeof(info));
     info.info = (void*)CFBridgingRetain(self);
     
+    // 建立跟client的tcp 連線  交換SDP 與 udp 相關資訊
     _s = CFSocketCreateWithNative(nil, s, kCFSocketDataCallBack, onSocket, &info);
     
     _rls = CFSocketCreateRunLoopSource(nil, _s, 0);
@@ -252,6 +254,7 @@ static void onRTCP(CFSocketRef s,
                 int portRTP = (int)[ports[0] integerValue];
                 int portRTCP = (int) [ports[1] integerValue];
                 
+                // 建立UDP socket
                 NSString* session_name = [self createSession:portRTP rtcp:portRTCP];
                 if (session_name != nil)
                 {
@@ -350,6 +353,7 @@ static void onRTCP(CFSocketRef s,
         struct sockaddr_in* paddr = (struct sockaddr_in*) CFDataGetBytePtr(data);
         paddr->sin_port = htons(portRTP);
         _addrRTP = CFDataCreate(nil, (uint8_t*) paddr, sizeof(struct sockaddr_in));
+        // UDP socket datagram socket
         _sRTP = CFSocketCreate(nil, PF_INET, SOCK_DGRAM, IPPROTO_UDP, 0, nil, nil);
         
         paddr->sin_port = htons(portRTCP);
@@ -441,6 +445,7 @@ static void onRTCP(CFSocketRef s,
             {
                 int cThis = (cBytes < max_fragment_packet)? cBytes : max_fragment_packet;
                 BOOL bEnd = (cThis == cBytes);
+                // Write RTP header
                 [self writeHeader:packet marker:(bLast && bEnd) time:pts];
                 unsigned char* pDest = packet + rtp_header_size;
                 
@@ -507,6 +512,7 @@ static void onRTCP(CFSocketRef s,
         if (_sRTP)
         {
             CFDataRef data = CFDataCreate(nil, packet, cBytes);
+            // 透過socket把資料送出去
             CFSocketSendData(_sRTP, _addrRTP, data, 0);
             CFRelease(data);
         }
