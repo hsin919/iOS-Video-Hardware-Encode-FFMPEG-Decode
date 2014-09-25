@@ -30,6 +30,7 @@
     
     _writer = [AVAssetWriter assetWriterWithURL:url fileType:AVFileTypeQuickTimeMovie error:nil];
     NSDictionary* settings = [NSDictionary dictionaryWithObjectsAndKeys:
+                              // H.264 encoder
                               AVVideoCodecH264, AVVideoCodecKey,
                               [NSNumber numberWithInt: width], AVVideoWidthKey,
                               [NSNumber numberWithInt:height], AVVideoHeightKey,
@@ -37,6 +38,7 @@
                                     @YES, AVVideoAllowFrameReorderingKey, nil],
                                     AVVideoCompressionPropertiesKey,
                               nil];
+    // 利用 AVFundation encode
     _writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:settings];
     _writerInput.expectsMediaDataInRealTime = YES;
     [_writer addInput:_writerInput];
@@ -64,6 +66,7 @@
         }
         if (_writerInput.readyForMoreMediaData == YES)
         {
+            // 把影像encode成h264到檔案
             [_writerInput appendSampleBuffer:sampleBuffer];
             return YES;
         }
