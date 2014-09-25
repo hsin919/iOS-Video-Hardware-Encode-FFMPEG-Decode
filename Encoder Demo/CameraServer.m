@@ -66,14 +66,19 @@ static CameraServer* theServer;
         
         // create an encoder
         _encoder = [AVEncoder encoderForHeight:480 andWidth:720];
+        // register callback here
         [_encoder encodeWithBlock:^int(NSArray* data, double pts) {
+            // data 是 frames
             if (_rtsp != nil)
             {
+                // _rtsp server 把encode好的資料送出去
                 _rtsp.bitrate = _encoder.bitspersecond;
                 [_rtsp onVideoData:data time:pts];
             }
             return 0;
         } onParams:^int(NSData *data) {
+            // _avcC 用在這邊
+            // 也可以[P2P] 抽換成 P2P hole punching 流程 (顯示 UI)
             _rtsp = [RTSPServer setupListener:data];
             return 0;
         }];
@@ -89,6 +94,7 @@ static CameraServer* theServer;
 
 - (void) captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
+    // 從相機拿到callback 準備做encoding
     // pass frame to encoder
     [_encoder encodeFrame:sampleBuffer];
 }

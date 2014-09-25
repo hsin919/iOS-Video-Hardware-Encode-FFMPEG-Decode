@@ -318,8 +318,10 @@ static void onRTCP(CFSocketRef s,
     
     NSString* profile_level_id = [NSString stringWithFormat:@"%02x%02x%02x", seqParams.Profile(), seqParams.Compat(), seqParams.Level()];
     
+    // SDP 透過avcC 包含了sps 資訊
     NSData* data = [NSData dataWithBytes:avcC.sps()->Start() length:avcC.sps()->Length()];
     NSString* sps = encodeToBase64(data);
+    // SDP包含了 pps 資訊
     data = [NSData dataWithBytes:avcC.pps()->Start() length:avcC.pps()->Length()];
     NSString* pps = encodeToBase64(data);
     

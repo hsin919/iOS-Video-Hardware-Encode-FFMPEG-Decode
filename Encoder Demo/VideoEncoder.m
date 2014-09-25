@@ -16,6 +16,7 @@
 {
     VideoEncoder* enc = [VideoEncoder alloc];
     [enc initPath:path Height:height andWidth:width];
+    NSLog(@"new VideoEncoder with path:%@", path);
     return enc;
 }
 

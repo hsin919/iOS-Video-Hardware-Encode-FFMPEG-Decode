@@ -135,7 +135,7 @@ static unsigned int to_host(unsigned char* p)
 {
     _outputBlock = block;
     _paramsBlock = paramsHandler;
-    _needParams = YES;
+    _needParams = YES; // server startup 一開始要寫參數
     _pendingNALU = nil;
     _firstpts = -1;
     _bitspersecond = 0;
@@ -219,13 +219,25 @@ static unsigned int to_host(unsigned char* p)
     return NO;
 }
 
+- (void)testTempAvccfile:(NSString *)filePath
+{
+    NSLog(@"[DEBUG]avcC file path:%@", filePath);
+    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *documentDBFolderPath = [docsPath stringByAppendingPathComponent:@"avcC.mp4"];
+    NSError *error;
+    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:documentDBFolderPath error:&error];
+}
+
 - (void) onParamsCompletion
 {
     // the initial one-frame-only file has been completed
     // Extract the avcC structure and then start monitoring the
     // main file to extract video from the mdat chunk.
+    //透過寫第一張frame 截取他的 _avcC
     if ([self parseParams:_headerWriter.path])
     {
+        //[self testTempAvccfile:_headerWriter.path];
+        
         if (_paramsBlock)
         {
             _paramsBlock(_avcC);
@@ -278,6 +290,8 @@ static unsigned int to_host(unsigned char* p)
         {
             struct stat st;
             fstat([_inputFile fileDescriptor], &st);
+            // 檔案大於 50MB就swap
+            NSLog(@"[DEBUG] file size:%lli", st.st_size);
             if (st.st_size > OUTPUT_FILE_SWITCH_POINT)
             {
                 _swapping = YES;
@@ -289,6 +303,7 @@ static unsigned int to_host(unsigned char* p)
                     _currentFile = 1;
                 }
                 NSLog(@"Swap to file %d", _currentFile);
+                // new 新的 _writer (VideoEncoder)
                 _writer = [VideoEncoder encoderForPath:[self makeFilename] Height:_height andWidth:_width];
                 
                 
@@ -300,6 +315,7 @@ static unsigned int to_host(unsigned char* p)
                     // finish the file, writing moov, before reading any more from the file
                     // since we don't yet know where the mdat ends
                     _readSource = nil;
+                    // 舊的writer 寫完以後可以把檔案送出去做clean up
                     [oldVideo finishWithCompletionHandler:^{
                         [self swapFiles:oldVideo.path];
                     }];
@@ -312,6 +328,7 @@ static unsigned int to_host(unsigned char* p)
 
 - (void) swapFiles:(NSString*) oldPath
 {
+    NSLog(@"[DEBUG]%s:%@", __FUNCTION__, oldPath);
     // save current position
     uint64_t pos = [_inputFile offsetInFile];
     
@@ -335,6 +352,7 @@ static unsigned int to_host(unsigned char* p)
     
     
     // open new file and set up dispatch source
+    // 為了判斷檔案寫的多大  是否需要swap 要把NSFileHandle 指向正在寫的path (VideoEncoder* _writer;)
     _inputFile = [NSFileHandle fileHandleForReadingAtPath:_writer.path];
     _readSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, [_inputFile fileDescriptor], 0, _readQueue);
     dispatch_source_set_event_handler(_readSource, ^{
@@ -350,6 +368,7 @@ static unsigned int to_host(unsigned char* p)
     // Identify the individual NALUs and extract them
     while (cReady > _lengthSize)
     {
+        // 從檔案裡讀取encode好的 h264資料放到記憶體裡
         NSData* lenField = [_inputFile readDataOfLength:_lengthSize];
         cReady -= _lengthSize;
         unsigned char* p = (unsigned char*) [lenField bytes];
@@ -358,6 +377,7 @@ static unsigned int to_host(unsigned char* p)
         if (lenNALU > cReady)
         {
             // whole NALU not present -- seek back to start of NALU and wait for more
+            // 很重要的trick seekback 等到完整的NALU
             [_inputFile seekToFileOffset:[_inputFile offsetInFile] - 4];
             break;
         }
@@ -371,7 +391,7 @@ static unsigned int to_host(unsigned char* p)
 - (void) onFileUpdate
 {
     // called whenever there is more data to read in the main encoder output file.
-    
+    NSLog(@"[DEBUG]%s", __FUNCTION__);
     struct stat s;
     fstat([_inputFile fileDescriptor], &s);
     int cReady = (int)(s.st_size - [_inputFile offsetInFile]);
@@ -400,6 +420,8 @@ static unsigned int to_host(unsigned char* p)
         {
             int cThis = cReady < _bytesToNextAtom ? cReady :_bytesToNextAtom;
             _bytesToNextAtom -= cThis;
+            
+            // file offset 前進
             [_inputFile seekToFileOffset:[_inputFile offsetInFile]+cThis];
             cReady -= cThis;
         }
@@ -473,6 +495,7 @@ static unsigned int to_host(unsigned char* p)
 - (void) onEncodedFrame
 {
     int poc = 0;
+    // Picture order count poc 越高的越應該早送出去  既使timestamp比人家後面
     for (NSData* d in _pendingNALU)
     {
         NALUnit nal((const BYTE*)[d bytes], (int)[d length]);
@@ -495,6 +518,7 @@ static unsigned int to_host(unsigned char* p)
                 [_times removeObjectAtIndex:index];
             }
         }
+        // callback camera server 準備透過rtsp送出去資料
         [self deliverFrame:_pendingNALU withTime:pts];
         _prevPOC = 0;
     }
@@ -512,6 +536,7 @@ static unsigned int to_host(unsigned char* p)
         {
             _frames = [NSMutableArray arrayWithCapacity:2];
         }
+        
         [_frames addObject:f];
     }
 }
