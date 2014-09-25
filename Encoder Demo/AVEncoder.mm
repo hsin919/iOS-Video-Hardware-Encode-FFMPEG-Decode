@@ -391,10 +391,10 @@ static unsigned int to_host(unsigned char* p)
 - (void) onFileUpdate
 {
     // called whenever there is more data to read in the main encoder output file.
-    NSLog(@"[DEBUG]%s", __FUNCTION__);
     struct stat s;
     fstat([_inputFile fileDescriptor], &s);
     int cReady = (int)(s.st_size - [_inputFile offsetInFile]);
+    NSLog(@"[DEBUG]%s file size:%lli offset:%lli Ready to sent:%i", __FUNCTION__, s.st_size, [_inputFile offsetInFile], cReady);
     
     // locate the mdat atom if needed
     while (!_foundMDAT && (cReady > 8))
