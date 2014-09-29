@@ -44,6 +44,44 @@ static CameraServer* theServer;
     return theServer;
 }
 
+- (void)initFilePath:(NSString *)frameFilePath
+{
+    NSError *_error = nil;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:frameFilePath]) {
+        [[NSFileManager defaultManager] createFileAtPath:frameFilePath contents:nil attributes:nil];
+    }
+    else
+    {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:frameFilePath error:&_error];
+        if(!success){
+            NSLog(@">>>[ERROR]Delete file fail");
+        }
+        [[NSFileManager defaultManager] createFileAtPath:frameFilePath contents:nil attributes:nil];
+    }
+}
+
+- (void)writeImageDataToFile:(NSData *)data
+{
+    static int frameIndex = 0;
+    NSString *frameFilePath = nil;
+    
+    NSFileHandle* fileHandle = nil;
+    
+    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    frameFilePath = [docsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.264", frameIndex]];
+
+    [self initFilePath:frameFilePath];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:frameFilePath];
+    [fileHandle seekToEndOfFile];
+    [fileHandle writeData:data];
+    
+    frameIndex++;
+    if(fileHandle != nil)
+    {
+        [fileHandle closeFile];
+    }
+}
+
 - (void)initFFMPEG
 {
     [FFMpegDecoder staticInitialize];
@@ -100,10 +138,12 @@ static CameraServer* theServer;
         // register callback here
         [_encoder encodeWithBlock:^int(NSArray* data, double pts) {
             // data 是 frames
-            if([data count] > 0)
+            for(NSData *frame in data)
             {
-                [self previewImage:[data objectAtIndex:0]];
+                [self writeImageDataToFile:frame];
+                [self previewImage:frame];
             }
+            
             if (_rtsp != nil)
             {
                 // _rtsp server 把encode好的資料送出去

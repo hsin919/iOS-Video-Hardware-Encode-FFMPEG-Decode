@@ -229,13 +229,63 @@ static unsigned int to_host(unsigned char* p)
     return NO;
 }
 
+- (void)initFilePath:(NSString *)frameFilePath
+{
+    NSError *_error = nil;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:frameFilePath]) {
+        [[NSFileManager defaultManager] createFileAtPath:frameFilePath contents:nil attributes:nil];
+    }
+    else
+    {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:frameFilePath error:&_error];
+        if(!success){
+            NSLog(@">>>[ERROR]Delete file fail");
+        }
+        [[NSFileManager defaultManager] createFileAtPath:frameFilePath contents:nil attributes:nil];
+    }
+}
+
+- (void)saveMP4File
+{
+    NSString *frameFilePath = nil;
+    
+    NSFileHandle* fileHandle = nil;
+    
+    NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    frameFilePath = [docsPath stringByAppendingPathComponent:@"total.mp4"];
+    
+    [self initFilePath:frameFilePath];
+    fileHandle = [NSFileHandle fileHandleForWritingAtPath:frameFilePath];
+    [fileHandle seekToEndOfFile];
+    
+    
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:_headerWriter.path];
+    [fileHandle writeData:data];
+    
+
+    if(fileHandle != nil)
+    {
+        [fileHandle closeFile];
+    }
+}
+
 - (void)testTempAvccfile:(NSString *)filePath
 {
     NSLog(@"[DEBUG]avcC file path:%@", filePath);
     NSString *docsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *documentDBFolderPath = [docsPath stringByAppendingPathComponent:@"avcC.mp4"];
+    NSString *documentDBFolderPath = [docsPath stringByAppendingPathComponent:@"avcc.mp4"];
     NSError *error;
     [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:documentDBFolderPath error:&error];
+    documentDBFolderPath = [docsPath stringByAppendingPathComponent:@"total.mp4"];
+    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:documentDBFolderPath error:&error];
+}
+
+- (void)callbackfirstFrameForFFMPEG
+{
+    NSMutableArray *frames = [[NSMutableArray alloc] init];
+    NSData *firstFrame = [[NSFileManager defaultManager] contentsAtPath:_headerWriter.path];
+    [frames addObject:firstFrame];
+    _outputBlock(frames, 0);
 }
 
 - (void) onParamsCompletion
@@ -246,7 +296,8 @@ static unsigned int to_host(unsigned char* p)
     //透過寫第一張frame 截取他的 _avcC
     if ([self parseParams:_headerWriter.path])
     {
-        //[self testTempAvccfile:_headerWriter.path];
+        [self testTempAvccfile:_headerWriter.path];
+        [self callbackfirstFrameForFFMPEG];
         
         if (_paramsBlock)
         {
@@ -466,7 +517,12 @@ static unsigned int to_host(unsigned char* p)
     {
         _outputBlock(frame, pts);
     }
-    
+    static int expTotalframe = 0;
+    if(expTotalframe == 200)
+    {
+        [self saveMP4File];
+    }
+    expTotalframe++;
 }
 
 - (void) processStoredFrames
