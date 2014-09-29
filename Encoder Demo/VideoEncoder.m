@@ -34,9 +34,9 @@
                               AVVideoCodecH264, AVVideoCodecKey,
                               [NSNumber numberWithInt: width], AVVideoWidthKey,
                               [NSNumber numberWithInt:height], AVVideoHeightKey,
-                              [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @YES, AVVideoAllowFrameReorderingKey, nil],
-                                    AVVideoCompressionPropertiesKey,
+                              //[NSDictionary dictionaryWithObjectsAndKeys:
+                              //      @YES, AVVideoAllowFrameReorderingKey, nil],
+                              //      AVVideoCompressionPropertiesKey,
                               nil];
     // 利用 AVFundation encode
     _writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:settings];
