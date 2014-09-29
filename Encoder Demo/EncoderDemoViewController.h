@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface EncoderDemoViewController : UIViewController
-@property (strong, nonatomic) IBOutlet UIView *cameraView;
+@property (strong, nonatomic) IBOutlet UIImageView *cameraView;
 @property (strong, nonatomic) IBOutlet UILabel *serverAddress;
 
 - (void) startPreview;

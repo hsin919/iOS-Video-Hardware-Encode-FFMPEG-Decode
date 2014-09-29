@@ -18,6 +18,11 @@
 {
     [super viewDidLoad];
     [self startPreview];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(show:)
+                                                 name:C4MI_NOTIFY_RECEIVEVIDEODATA
+                                               object:nil];
 }
 
 - (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -28,6 +33,22 @@
     [[preview connection] setVideoOrientation:toInterfaceOrientation];
 }
 
+- (void)show:(NSNotification *)notification
+{
+    //NSDictionary *userInfo = [notification userInfo];
+    UIImage *image = [notification object];
+    if(![NSThread isMainThread])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cameraView.image = image;
+        });
+    }
+    else
+    {
+        cameraView.image = image;
+    }
+}
+
 - (void) startPreview
 {
     AVCaptureVideoPreviewLayer* preview = [[CameraServer server] getPreviewLayer];
@@ -35,7 +56,7 @@
     preview.frame = self.cameraView.bounds;
     [[preview connection] setVideoOrientation:UIInterfaceOrientationPortrait];
     
-    [self.cameraView.layer addSublayer:preview];
+    //[self.cameraView.layer addSublayer:preview];
     
     self.serverAddress.text = [[CameraServer server] getURL];
 }
