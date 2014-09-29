@@ -143,6 +143,16 @@ static unsigned int to_host(unsigned char* p)
 
 - (BOOL) parseParams:(NSString*) path
 {
+    /*
+    int fileIndex = 0;
+    NSString *fileName = [NSString stringWithFormat:@"%d", fileIndex];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"h264"];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+    {
+        path = filePath;
+    }*/
+    
     NSFileHandle* file = [NSFileHandle fileHandleForReadingAtPath:path];
     struct stat s;
     fstat([file fileDescriptor], &s);

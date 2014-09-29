@@ -9,6 +9,7 @@
 #import "CameraServer.h"
 #import "AVEncoder.h"
 #import "RTSPServer.h"
+#import "h264Decoder.h"
 
 static CameraServer* theServer;
 
@@ -23,6 +24,7 @@ static CameraServer* theServer;
     
     RTSPServer* _rtsp;
 }
+@property (nonatomic, strong) FFMpegDecoder *h264decoder;
 @end
 
 
@@ -40,6 +42,33 @@ static CameraServer* theServer;
 + (CameraServer*) server
 {
     return theServer;
+}
+
+- (void)initFFMPEG
+{
+    [FFMpegDecoder staticInitialize];
+    
+    FFMpegDecoder *tmpffmpegdecoder = [[FFMpegDecoder alloc] initH264CodecWithWidth:0 height:0 privateData:nil];
+    self.h264decoder = tmpffmpegdecoder;
+}
+
+- (void)previewImage:(NSData *)frame
+{
+    NSMutableDictionary *info =[NSMutableDictionary dictionaryWithCapacity:1];
+    UIImage *decodeImage = nil;
+    
+    FFDecodeResult result = [self.h264decoder decodeFrame:frame];
+    if(result == DECODE_SUCCESS)
+    {
+        NSLog(@"FFMPEG decode DECODE_SUCCESS");
+        decodeImage =[self.h264decoder getDecodedFrameUI];
+        [[NSNotificationCenter defaultCenter] postNotificationName:C4MI_NOTIFY_RECEIVEVIDEODATA object:decodeImage userInfo:info];
+    }
+    else
+    {
+        NSLog(@"FFMPEG decode fail:%i", result);
+    }
+    
 }
 
 - (void) startup
@@ -64,11 +93,17 @@ static CameraServer* theServer;
         _output.videoSettings = setcapSettings;
         [_session addOutput:_output];
         
+        [self initFFMPEG];
+        
         // create an encoder
         _encoder = [AVEncoder encoderForHeight:480 andWidth:720];
         // register callback here
         [_encoder encodeWithBlock:^int(NSArray* data, double pts) {
             // data 是 frames
+            if([data count] > 0)
+            {
+                [self previewImage:[data objectAtIndex:0]];
+            }
             if (_rtsp != nil)
             {
                 // _rtsp server 把encode好的資料送出去
