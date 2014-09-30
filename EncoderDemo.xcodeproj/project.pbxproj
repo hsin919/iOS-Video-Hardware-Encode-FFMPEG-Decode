@@ -32,6 +32,7 @@
 		846119C716D3BF8D00468D98 /* CameraServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 846119C616D3BF8D00468D98 /* CameraServer.m */; };
 		A40B9933D9554AC0ADCF097A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F485EF5C583E4F04BE73DD25 /* libPods.a */; };
 		D97E9AFB1A2C19B6001140F4 /* VideoDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D97E9AFA1A2C19B6001140F4 /* VideoDecoder.m */; };
+		D97E9AFE1A2C1E01001140F4 /* NSData+hex.m in Sources */ = {isa = PBXBuildFile; fileRef = D97E9AFD1A2C1E01001140F4 /* NSData+hex.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,8 @@
 		846119C616D3BF8D00468D98 /* CameraServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraServer.m; sourceTree = "<group>"; };
 		D97E9AF91A2C19B6001140F4 /* VideoDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoDecoder.h; sourceTree = "<group>"; };
 		D97E9AFA1A2C19B6001140F4 /* VideoDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoDecoder.m; sourceTree = "<group>"; };
+		D97E9AFC1A2C1E01001140F4 /* NSData+hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+hex.h"; sourceTree = SOURCE_ROOT; };
+		D97E9AFD1A2C1E01001140F4 /* NSData+hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+hex.m"; sourceTree = SOURCE_ROOT; };
 		F485EF5C583E4F04BE73DD25 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -130,6 +133,8 @@
 		841255A616A035E3001749D9 /* Encoder Demo */ = {
 			isa = PBXGroup;
 			children = (
+				D97E9AFC1A2C1E01001140F4 /* NSData+hex.h */,
+				D97E9AFD1A2C1E01001140F4 /* NSData+hex.m */,
 				D97E9AF91A2C19B6001140F4 /* VideoDecoder.h */,
 				D97E9AFA1A2C19B6001140F4 /* VideoDecoder.m */,
 				841255AF16A035E3001749D9 /* EncoderDemoAppDelegate.h */,
@@ -294,6 +299,7 @@
 			files = (
 				841255AD16A035E3001749D9 /* main.m in Sources */,
 				841255B116A035E3001749D9 /* EncoderDemoAppDelegate.m in Sources */,
+				D97E9AFE1A2C1E01001140F4 /* NSData+hex.m in Sources */,
 				D97E9AFB1A2C19B6001140F4 /* VideoDecoder.m in Sources */,
 				841255C016A035E3001749D9 /* EncoderDemoViewController.m in Sources */,
 				841255CE16A47A7D001749D9 /* AVEncoder.mm in Sources */,
