@@ -259,14 +259,15 @@ static unsigned int to_host(unsigned char* p)
     [fileHandle seekToEndOfFile];
     
     
-    NSData *data = [[NSFileManager defaultManager] contentsAtPath:_headerWriter.path];
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:_writer.path];
     [fileHandle writeData:data];
     
-
+    
     if(fileHandle != nil)
     {
         [fileHandle closeFile];
     }
+    _writer = nil;
 }
 
 - (void)testTempAvccfile:(NSString *)filePath
@@ -277,6 +278,13 @@ static unsigned int to_host(unsigned char* p)
     NSError *error;
     [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:documentDBFolderPath error:&error];
     documentDBFolderPath = [docsPath stringByAppendingPathComponent:@"total.mp4"];
+    NSError *_error = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:documentDBFolderPath]) {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:documentDBFolderPath error:&_error];
+        if(!success){
+            NSLog(@">>>[ERROR]Delete file fail");
+        }
+    }
     [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:documentDBFolderPath error:&error];
 }
 
@@ -517,12 +525,6 @@ static unsigned int to_host(unsigned char* p)
     {
         _outputBlock(frame, pts);
     }
-    static int expTotalframe = 0;
-    if(expTotalframe == 200)
-    {
-        [self saveMP4File];
-    }
-    expTotalframe++;
 }
 
 - (void) processStoredFrames
@@ -688,7 +690,7 @@ static unsigned int to_host(unsigned char* p)
         if (_writer)
         {
             [_writer finishWithCompletionHandler:^{
-                _writer = nil;
+                [self saveMP4File];
             }];
         }
         // !! wait for these to finish before returning and delete temp files

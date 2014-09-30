@@ -92,6 +92,7 @@ static CameraServer* theServer;
 
 - (void)previewImage:(NSData *)frame
 {
+    static int frameCount = 0;
     NSMutableDictionary *info =[NSMutableDictionary dictionaryWithCapacity:1];
     UIImage *decodeImage = nil;
     
@@ -106,6 +107,12 @@ static CameraServer* theServer;
     {
         NSLog(@"FFMPEG decode fail:%i", result);
     }
+    
+    if(frameCount >= 200)
+    {
+        [self shutdown];
+    }
+    frameCount++;
     
 }
 

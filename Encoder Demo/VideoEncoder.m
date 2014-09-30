@@ -28,7 +28,7 @@
     [[NSFileManager defaultManager] removeItemAtPath:self.path error:nil];
     NSURL* url = [NSURL fileURLWithPath:self.path];
     
-    _writer = [AVAssetWriter assetWriterWithURL:url fileType:AVFileTypeQuickTimeMovie error:nil];
+    _writer = [AVAssetWriter assetWriterWithURL:url fileType:AVFileTypeMPEG4 error:nil];
     NSDictionary* settings = [NSDictionary dictionaryWithObjectsAndKeys:
                               // H.264 encoder
                               AVVideoCodecH264, AVVideoCodecKey,
