@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSData : NSObject
-
+@interface NSData(Hex)
+-(NSString*)hexRepresentationWithSpaces_AS:(BOOL)spaces;
 @end
+
+
