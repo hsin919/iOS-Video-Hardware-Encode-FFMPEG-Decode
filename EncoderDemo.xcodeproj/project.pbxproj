@@ -32,20 +32,21 @@
 		841399FA16B1842B00FAD610 /* RTSPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 841399F916B1842B00FAD610 /* RTSPMessage.m */; };
 		846119C716D3BF8D00468D98 /* CameraServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 846119C616D3BF8D00468D98 /* CameraServer.m */; };
 		D9301B8319D94B3500364E84 /* h264Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D9301B8219D94B3500364E84 /* h264Decoder.m */; };
+		D9A4F6D419DBC73700C0B781 /* 0.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D9A4F6D319DBC73700C0B781 /* 0.mp4 */; };
 		D9D8269419DAB2AD00A5F34A /* NSData+hex.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D8269319DAB2AD00A5F34A /* NSData+hex.m */; };
 		D9E7469019D4F89200C199E3 /* 0.h264 in Resources */ = {isa = PBXBuildFile; fileRef = D9E7468F19D4F89200C199E3 /* 0.h264 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		667371802D344A7BB0CD4897 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8412559C16A035E3001749D9 /* Encoder Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Encoder Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8412559C16A035E3001749D9 /* EncoderDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EncoderDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		841255A016A035E3001749D9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		841255A216A035E3001749D9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		841255A416A035E3001749D9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		841255A816A035E3001749D9 /* Encoder Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Encoder Demo-Info.plist"; sourceTree = "<group>"; };
+		841255A816A035E3001749D9 /* EncoderDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EncoderDemo-Info.plist"; sourceTree = "<group>"; };
 		841255AA16A035E3001749D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		841255AC16A035E3001749D9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		841255AE16A035E3001749D9 /* Encoder Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Encoder Demo-Prefix.pch"; sourceTree = "<group>"; };
+		841255AE16A035E3001749D9 /* EncoderDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EncoderDemo-Prefix.pch"; sourceTree = "<group>"; };
 		841255AF16A035E3001749D9 /* EncoderDemoAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncoderDemoAppDelegate.h; sourceTree = "<group>"; };
 		841255B016A035E3001749D9 /* EncoderDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncoderDemoAppDelegate.m; sourceTree = "<group>"; };
 		841255B216A035E3001749D9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 		9A5C0D2227B04DF5BF545F9A /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		D9301B8119D94B3500364E84 /* h264Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = h264Decoder.h; sourceTree = "<group>"; };
 		D9301B8219D94B3500364E84 /* h264Decoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = h264Decoder.m; sourceTree = "<group>"; };
+		D9A4F6D319DBC73700C0B781 /* 0.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 0.mp4; sourceTree = "<group>"; };
 		D9D8269219DAB2AD00A5F34A /* NSData+hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+hex.h"; sourceTree = "<group>"; };
 		D9D8269319DAB2AD00A5F34A /* NSData+hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+hex.m"; sourceTree = "<group>"; };
 		D9E7468F19D4F89200C199E3 /* 0.h264 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 0.h264; sourceTree = "<group>"; };
@@ -118,7 +120,7 @@
 		8412559D16A035E3001749D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8412559C16A035E3001749D9 /* Encoder Demo.app */,
+				8412559C16A035E3001749D9 /* EncoderDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,6 +141,7 @@
 			children = (
 				D9301B8119D94B3500364E84 /* h264Decoder.h */,
 				D9301B8219D94B3500364E84 /* h264Decoder.m */,
+				D9A4F6D319DBC73700C0B781 /* 0.mp4 */,
 				D9E7468F19D4F89200C199E3 /* 0.h264 */,
 				841255AF16A035E3001749D9 /* EncoderDemoAppDelegate.h */,
 				841255B016A035E3001749D9 /* EncoderDemoAppDelegate.m */,
@@ -158,10 +161,10 @@
 		841255A716A035E3001749D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				841255A816A035E3001749D9 /* Encoder Demo-Info.plist */,
+				841255A816A035E3001749D9 /* EncoderDemo-Info.plist */,
 				841255A916A035E3001749D9 /* InfoPlist.strings */,
 				841255AC16A035E3001749D9 /* main.m */,
-				841255AE16A035E3001749D9 /* Encoder Demo-Prefix.pch */,
+				841255AE16A035E3001749D9 /* EncoderDemo-Prefix.pch */,
 				841255B216A035E3001749D9 /* Default.png */,
 				841255B416A035E3001749D9 /* Default@2x.png */,
 				841255B616A035E3001749D9 /* Default-568h@2x.png */,
@@ -200,9 +203,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8412559B16A035E3001749D9 /* Encoder Demo */ = {
+		8412559B16A035E3001749D9 /* EncoderDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "Encoder Demo" */;
+			buildConfigurationList = 841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "EncoderDemo" */;
 			buildPhases = (
 				19CFEA9D355F41EB9046248C /* Check Pods Manifest.lock */,
 				8412559816A035E3001749D9 /* Sources */,
@@ -214,9 +217,9 @@
 			);
 			dependencies = (
 			);
-			name = "Encoder Demo";
+			name = EncoderDemo;
 			productName = "Encoder Demo";
-			productReference = 8412559C16A035E3001749D9 /* Encoder Demo.app */;
+			productReference = 8412559C16A035E3001749D9 /* EncoderDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -229,7 +232,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Geraint Davies";
 			};
-			buildConfigurationList = 8412559616A035E3001749D9 /* Build configuration list for PBXProject "Encoder Demo" */;
+			buildConfigurationList = 8412559616A035E3001749D9 /* Build configuration list for PBXProject "EncoderDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -241,7 +244,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8412559B16A035E3001749D9 /* Encoder Demo */,
+				8412559B16A035E3001749D9 /* EncoderDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -255,6 +258,7 @@
 				D9E7469019D4F89200C199E3 /* 0.h264 in Resources */,
 				841255B316A035E3001749D9 /* Default.png in Resources */,
 				841255B516A035E3001749D9 /* Default@2x.png in Resources */,
+				D9A4F6D419DBC73700C0B781 /* 0.mp4 in Resources */,
 				841255B716A035E3001749D9 /* Default-568h@2x.png in Resources */,
 				841255BA16A035E3001749D9 /* MainStoryboard_iPhone.storyboard in Resources */,
 				841255BD16A035E3001749D9 /* MainStoryboard_iPad.storyboard in Resources */,
@@ -404,9 +408,9 @@
 			baseConfigurationReference = 9A5C0D2227B04DF5BF545F9A /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Encoder Demo/Encoder Demo-Prefix.pch";
-				INFOPLIST_FILE = "Encoder Demo/Encoder Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Encoder Demo/EncoderDemo-Prefix.pch";
+				INFOPLIST_FILE = "Encoder Demo/EncoderDemo-Info.plist";
+				PRODUCT_NAME = EncoderDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -416,9 +420,9 @@
 			baseConfigurationReference = 9A5C0D2227B04DF5BF545F9A /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Encoder Demo/Encoder Demo-Prefix.pch";
-				INFOPLIST_FILE = "Encoder Demo/Encoder Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Encoder Demo/EncoderDemo-Prefix.pch";
+				INFOPLIST_FILE = "Encoder Demo/EncoderDemo-Info.plist";
+				PRODUCT_NAME = EncoderDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -426,7 +430,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8412559616A035E3001749D9 /* Build configuration list for PBXProject "Encoder Demo" */ = {
+		8412559616A035E3001749D9 /* Build configuration list for PBXProject "EncoderDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				841255C116A035E3001749D9 /* Debug */,
@@ -435,7 +439,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "Encoder Demo" */ = {
+		841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "EncoderDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				841255C416A035E3001749D9 /* Debug */,

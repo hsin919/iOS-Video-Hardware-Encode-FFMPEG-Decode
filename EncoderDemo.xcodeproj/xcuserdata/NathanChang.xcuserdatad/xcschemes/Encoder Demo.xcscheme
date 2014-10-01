@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8412559B16A035E3001749D9"
-               BuildableName = "Encoder Demo.app"
-               BlueprintName = "Encoder Demo"
-               ReferencedContainer = "container:Encoder Demo.xcodeproj">
+               BuildableName = "EncoderDemo.app"
+               BlueprintName = "EncoderDemo"
+               ReferencedContainer = "container:EncoderDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8412559B16A035E3001749D9"
-            BuildableName = "Encoder Demo.app"
-            BlueprintName = "Encoder Demo"
-            ReferencedContainer = "container:Encoder Demo.xcodeproj">
+            BuildableName = "EncoderDemo.app"
+            BlueprintName = "EncoderDemo"
+            ReferencedContainer = "container:EncoderDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8412559B16A035E3001749D9"
-            BuildableName = "Encoder Demo.app"
-            BlueprintName = "Encoder Demo"
-            ReferencedContainer = "container:Encoder Demo.xcodeproj">
+            BuildableName = "EncoderDemo.app"
+            BlueprintName = "EncoderDemo"
+            ReferencedContainer = "container:EncoderDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8412559B16A035E3001749D9"
-            BuildableName = "Encoder Demo.app"
-            BlueprintName = "Encoder Demo"
-            ReferencedContainer = "container:Encoder Demo.xcodeproj">
+            BuildableName = "EncoderDemo.app"
+            BlueprintName = "EncoderDemo"
+            ReferencedContainer = "container:EncoderDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
