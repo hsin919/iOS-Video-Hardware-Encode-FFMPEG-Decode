@@ -85,9 +85,7 @@ static CameraServer* theServer;
 - (void)initFFMPEG
 {
     [FFMpegDecoder staticInitialize];
-    
-    FFMpegDecoder *tmpffmpegdecoder = [[FFMpegDecoder alloc] initH264CodecWithWidth:0 height:0 privateData:nil];
-    self.h264decoder = tmpffmpegdecoder;
+    self.h264decoder = nil;
 }
 
 - (void)previewImage:(NSData *)frame
@@ -96,6 +94,10 @@ static CameraServer* theServer;
     NSMutableDictionary *info =[NSMutableDictionary dictionaryWithCapacity:1];
     UIImage *decodeImage = nil;
     
+    if(self.h264decoder == nil)
+    {
+        self.h264decoder = [[FFMpegDecoder alloc] initWithFirstFrame:frame];
+    }
     FFDecodeResult result = [self.h264decoder decodeFrame:frame];
     if(result == DECODE_SUCCESS)
     {
@@ -147,8 +149,13 @@ static CameraServer* theServer;
             // data 是 frames
             for(NSData *frame in data)
             {
+                /*
+                // For exp 固定的frame 看是否可以decode
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"0" ofType:@"mp4"];
+                NSData *data = [[NSFileManager defaultManager] contentsAtPath:filePath];*/
+                
                 [self writeImageDataToFile:frame];
-                [self previewImage:frame];
+                [self previewImage:data];
             }
             
             if (_rtsp != nil)

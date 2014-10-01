@@ -53,6 +53,8 @@ typedef void (*LogCallbackfn)(int level, const char *module, const char* logLine
 + (void)staticInitialize;
 + (void)registerLogCallback:(LogCallbackfn)fn;
 
+- (id)initWithFirstFrame:(NSData *)frameData;
+
 //why duplicate function, because we don't want to break those original code
 - (id)initMPEG4CodecWithWidth:(int)width
                        height:(int)height
@@ -61,6 +63,7 @@ typedef void (*LogCallbackfn)(int level, const char *module, const char* logLine
 - (id)initH264CodecWithWidth:(int)width
 			 height:(int)height 
 		privateData:(NSData*)privateData;
+
 
 - (FFDecodeResult)decodeFrame:(NSData*)frameData;
 

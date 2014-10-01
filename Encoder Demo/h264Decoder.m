@@ -36,13 +36,20 @@ static void av_log_callback(void *ptr,
 
 @interface FFMpegDecoder()
 {
-    
+    NSInteger           _videoStream;
+    NSArray             *_videoStreams;
+    AVFormatContext     *_formatCtx;
+    AVFrame             *_videoFrame;
+    CGFloat             _videoTimeBase;
 }
 @property (nonatomic, strong) NSLock *lockFFMPEG;
+@property (nonatomic, strong) NSString *tempHeaderFilePath;
+@property (readonly, nonatomic) CGFloat fps;
 
 - (id)initCodecWithWidth:(int)width
                   height:(int)height
              privateData:(NSData*)privateData codec:(enum AVCodecID)codecType;
+- (NSString *)createTempFileForHeader;
 @end
 
 
@@ -55,7 +62,6 @@ static void av_log_callback(void *ptr,
 		if(beenInitialized==false) {
             
             ffmpegLock= [[NSLock alloc] init];
-            
             av_register_all();
             //avcodec_init();
             beenInitialized=TRUE;
@@ -74,7 +80,189 @@ static void av_log_callback(void *ptr,
 //initWithCodec:kVCT_H264
 //colorSpace:kVCS_RGBA32
 
+- (int) openFormatContext
+{
+    AVFormatContext *formatCtx = NULL;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:_tempHeaderFilePath]) {
+        NSLog(@"file exist");
+    }
+    if (avformat_open_input(&formatCtx, [_tempHeaderFilePath cStringUsingEncoding: NSUTF8StringEncoding], NULL, NULL) < 0) {
+        if (formatCtx)
+            avformat_free_context(formatCtx);
+        NSLog(@"[ERROR] initWithFirstFrame avformat_open_input fail");
+        return -1;
+    }
+    
+    if (avformat_find_stream_info(formatCtx, NULL) < 0) {
+        
+        avformat_close_input(&formatCtx);
+        NSLog(@"[ERROR] initWithFirstFrame avformat_find_stream_info fail");
+        return -1;
+    }
+    
+    av_dump_format(formatCtx, 0, [_tempHeaderFilePath.lastPathComponent cStringUsingEncoding: NSUTF8StringEncoding], false);
+    _formatCtx = formatCtx;
+    return 0;
+}
 
+static NSArray *collectStreams(AVFormatContext *formatCtx, enum AVMediaType codecType)
+{
+    NSMutableArray *ma = [NSMutableArray array];
+    for (NSInteger i = 0; i < formatCtx->nb_streams; ++i)
+        if (codecType == formatCtx->streams[i]->codec->codec_type)
+            [ma addObject: [NSNumber numberWithInteger: i]];
+    return [ma copy];
+}
+
+- (void) closeVideoStream
+{
+    _videoStream = -1;
+    //[self closeScaler];
+    if (_videoFrame) {
+        av_free(_videoFrame);
+        _videoFrame = NULL;
+    }
+}
+
+static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *pFPS, CGFloat *pTimeBase)
+{
+    CGFloat fps, timebase;
+    
+    if (st->time_base.den && st->time_base.num)
+        timebase = av_q2d(st->time_base);
+    else if(st->codec->time_base.den && st->codec->time_base.num)
+        timebase = av_q2d(st->codec->time_base);
+    else
+        timebase = defaultTimeBase;
+    
+    if (st->codec->ticks_per_frame != 1) {
+        NSLog(0, @"WARNING: st.codec.ticks_per_frame=%d", st->codec->ticks_per_frame);
+        //timebase *= st->codec->ticks_per_frame;
+    }
+    
+    if (st->avg_frame_rate.den && st->avg_frame_rate.num)
+        fps = av_q2d(st->avg_frame_rate);
+    else if (st->r_frame_rate.den && st->r_frame_rate.num)
+        fps = av_q2d(st->r_frame_rate);
+    else
+        fps = 1.0 / timebase;
+    
+    if (pFPS)
+        *pFPS = fps;
+    if (pTimeBase)
+        *pTimeBase = timebase;
+}
+
+- (int) openVideoStream: (NSInteger) videoStream
+{
+    // get a pointer to the codec context for the video stream
+    codecCtx = _formatCtx->streams[videoStream]->codec;
+    
+    // find the decoder for the video stream
+    codec = avcodec_find_decoder(codecCtx->codec_id);
+    if (!codec)
+        return -1;
+    
+    // inform the codec that we can handle truncated bitstreams -- i.e.,
+    // bitstreams where frame boundaries can fall in the middle of packets
+    //if(codec->capabilities & CODEC_CAP_TRUNCATED)
+    //    _codecCtx->flags |= CODEC_FLAG_TRUNCATED;
+    
+    // open codec
+    [ffmpegLock lock];
+    if (avcodec_open2(codecCtx, codec, NULL) < 0) {
+        [ffmpegLock unlock];
+        return -1;
+    }
+    [ffmpegLock unlock];
+    
+    _videoFrame = av_frame_alloc();
+    
+    if (!_videoFrame) {
+        avcodec_close(codecCtx);
+        return -1;
+    }
+    
+    _videoStream = videoStream;
+    
+    // determine fps
+    
+    AVStream *st = _formatCtx->streams[_videoStream];
+    avStreamFPSTimeBase(st, 0.04, &_fps, &_videoTimeBase);
+    /*
+    LoggerVideo(1, @"video codec size: %d:%d fps: %.3f tb: %f",
+                self.frameWidth,
+                self.frameHeight,
+                _fps,
+                _videoTimeBase);
+    
+    LoggerVideo(1, @"video start time %f", st->start_time * _videoTimeBase);
+    LoggerVideo(1, @"video disposition %d", st->disposition);*/
+    
+    return 0;
+}
+
+- (int) openVideoStream
+{
+    _videoStream = -1;
+    _videoStreams = collectStreams(_formatCtx, AVMEDIA_TYPE_VIDEO);
+    for (NSNumber *n in _videoStreams) {
+        
+        const NSUInteger iStream = n.integerValue;
+        
+        if (0 == (_formatCtx->streams[iStream]->disposition & AV_DISPOSITION_ATTACHED_PIC)) {
+            
+            if([self openVideoStream:iStream] == 0)
+            {
+                return 0;
+            }
+        }
+    }
+    
+    return -1;
+}
+
+- (id)initWithFirstFrame:(NSData *)frameData
+{
+    self = [super init];
+    if (self) {
+        _tempHeaderFilePath = [self createTempFileForHeader];
+       
+        if (![[NSFileManager defaultManager] fileExistsAtPath:_tempHeaderFilePath]) {
+            [[NSFileManager defaultManager] createFileAtPath:_tempHeaderFilePath contents:nil attributes:nil];
+        }
+        
+        // Write data
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:_tempHeaderFilePath];
+        [fileHandle seekToEndOfFile];
+        [fileHandle writeData:frameData];
+        
+        if(fileHandle != nil)
+        {
+            [fileHandle closeFile];
+        }
+        
+        if([self openFormatContext] < 0)
+        {
+            return nil;
+        }
+        
+        if([self openVideoStream] < 0)
+        {
+            return nil;
+        }
+        
+        srcFrame = avcodec_alloc_frame();
+        dstFrame = avcodec_alloc_frame();
+        
+        av_init_packet(&packet);
+        
+        self.lockFFMPEG = [[NSLock alloc] init];
+        initialized=true;
+    }
+    return self;
+}
 
 - (id)initCodecWithWidth:(int)width
                   height:(int)height
@@ -139,6 +327,17 @@ static void av_log_callback(void *ptr,
                  privateData:(NSData*)privateData {
     
 	return [self initCodecWithWidth:width height:height privateData:privateData codec:AV_CODEC_ID_H264];
+}
+
+- (NSString *)createTempFileForHeader
+{
+    // Create temporary folder
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docPath =[paths objectAtIndex:0];
+    NSString *fileName = [NSString stringWithFormat:@"%@_%@", [[NSProcessInfo processInfo] globallyUniqueString], @"header.mp4"];
+    NSString *path = [docPath stringByAppendingPathComponent:fileName];
+    
+    return path;
 }
 
 - (id)initMPEG4CodecWithWidth:(int)width
@@ -317,6 +516,10 @@ static void av_log_callback(void *ptr,
     
     [self.lockFFMPEG unlock];
 
+    // remove files
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:_tempHeaderFilePath error:&error];
+    _tempHeaderFilePath = nil;
     
 //    }
 }
