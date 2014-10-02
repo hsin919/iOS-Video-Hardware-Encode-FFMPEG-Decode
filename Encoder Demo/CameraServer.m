@@ -98,23 +98,20 @@ static CameraServer* theServer;
     {
         self.h264decoder = [[FFMpegDecoder alloc] initWithFirstFrame:frame];
     }
-    FFDecodeResult result = [self.h264decoder decodeFrame:frame];
-    if(result == DECODE_SUCCESS)
-    {
-        NSLog(@"FFMPEG decode DECODE_SUCCESS");
-        decodeImage =[self.h264decoder getDecodedFrameUI];
-        [[NSNotificationCenter defaultCenter] postNotificationName:C4MI_NOTIFY_RECEIVEVIDEODATA object:decodeImage userInfo:info];
-    }
     else
     {
-        NSLog(@"FFMPEG decode fail:%i", result);
+        FFDecodeResult result = [self.h264decoder decodeFrame:frame];
+        if(result == DECODE_SUCCESS)
+        {
+            NSLog(@"FFMPEG decode DECODE_SUCCESS");
+            decodeImage =[self.h264decoder getDecodedFrameUI];
+            [[NSNotificationCenter defaultCenter] postNotificationName:C4MI_NOTIFY_RECEIVEVIDEODATA object:decodeImage userInfo:info];
+        }
+        else
+        {
+            NSLog(@"FFMPEG decode fail:%i", result);
+        }
     }
-    
-    if(frameCount >= 200)
-    {
-        [self shutdown];
-    }
-    frameCount++;
     
 }
 
@@ -149,10 +146,8 @@ static CameraServer* theServer;
             // data 是 frames
             for(NSData *frame in data)
             {
-                // For exp 固定的frame 看是否可以decode
-                //NSString *filePath = [[NSBundle mainBundle] pathForResource:@"0" ofType:@"mp4"];
-                //NSData *testdata = [[NSFileManager defaultManager] contentsAtPath:filePath];
-                [self writeImageDataToFile:frame];
+                // EXP_FILE
+                //[self writeImageDataToFile:frame];
                 [self previewImage:frame];
             }
             

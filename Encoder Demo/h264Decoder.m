@@ -62,6 +62,7 @@ static void av_log_callback(void *ptr,
 		if(beenInitialized==false) {
             
             ffmpegLock= [[NSLock alloc] init];
+            
             av_register_all();
             //avcodec_init();
             beenInitialized=TRUE;
@@ -347,6 +348,23 @@ static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *
     return [self initCodecWithWidth:width height:height privateData:privateData codec:AV_CODEC_ID_MPEG4];
 }
 
+-(NSData *)insertFirstFourBytes
+{
+    NSString *startBit = @"00 00 00 01";
+    startBit = [startBit stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSMutableData *commandToSend= [[NSMutableData alloc] init];
+    unsigned char whole_byte;
+    char byte_chars[3] = {'\0','\0','\0'};
+    for (int i = 0; i < ([startBit length] / 2); i++) {
+        byte_chars[0] = [startBit characterAtIndex:i*2];
+        byte_chars[1] = [startBit characterAtIndex:i*2+1];
+        whole_byte = strtol(byte_chars, NULL, 16);
+        [commandToSend appendBytes:&whole_byte length:1];
+    }
+    //NSLog(@"%@", commandToSend);
+    return commandToSend;
+}
+
 - (FFDecodeResult)decodeFrame:(NSData*)srcframeData {
 	//frameReady = FALSE;
 	
@@ -356,22 +374,48 @@ static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *
         return DECODE_NOT_INIT;
     }
     
-	packet.data = (uint8_t*)[srcframeData bytes];
-	packet.size = [srcframeData length];
+    static int fakeindex = 1;
+    
+    NSMutableData *nalData = [[NSMutableData alloc] init];
+    const uint8_t *tempBytes = srcframeData.bytes;
+    if(tempBytes[0] == 0x00 &&
+       tempBytes[1] == 0x00 &&
+       tempBytes[2] == 0x00 &&
+       tempBytes[3] == 0x01)
+    {
+        NSLog(@"Complete frame");
+    }
+    else
+    {
+        [nalData appendData:[self insertFirstFourBytes]];
+    }
+    
+    [nalData appendData:srcframeData];
+    
+    AVPacket _packet;
+    av_init_packet(&_packet);
+    _packet.data = (uint8_t*)[nalData bytes];
+    _packet.size = [nalData length];
+    _packet.stream_index = 0;
+    _packet.pts = fakeindex;
+    _packet.dts = fakeindex;
+    _packet.duration = 0;
+    
+    fakeindex++;
 	
 	int frameFinished = 0;
     //NSLog(@"DEBUG_H264CRASH codeCtx decodeFrame %p", codecCtx);
     
     [self.lockFFMPEG lock];
     
-    int res = avcodec_decode_video2(codecCtx, srcFrame, &frameFinished, &packet);
+    int res = avcodec_decode_video2(codecCtx, srcFrame, &frameFinished, &_packet);
     //no frame or err( res < 0)
     if(res <= 0 || frameFinished == 0) {
         //NSLog(@"can't decode due to no frame or err( res < 0)");
         [self.lockFFMPEG unlock];
         return DECODE_FAIL;
     }
-    
+    av_free_packet(&_packet);
     // Need to delay initializing the output buffers because we don't know the dimensions until we decode the first frame.
     //HBRLog(@">>>codecCtx->width/height is %d/%d", codecCtx->width, codecCtx->height);
     //HBRLog(@">>>globalWidth/height is %d/%d", globalWidth, globalHeight);
