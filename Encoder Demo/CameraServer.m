@@ -149,13 +149,11 @@ static CameraServer* theServer;
             // data 是 frames
             for(NSData *frame in data)
             {
-                
                 // For exp 固定的frame 看是否可以decode
-                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"0" ofType:@"mp4"];
-                NSData *testdata = [[NSFileManager defaultManager] contentsAtPath:filePath];
-                
+                //NSString *filePath = [[NSBundle mainBundle] pathForResource:@"0" ofType:@"mp4"];
+                //NSData *testdata = [[NSFileManager defaultManager] contentsAtPath:filePath];
                 [self writeImageDataToFile:frame];
-                [self previewImage:testdata];
+                [self previewImage:frame];
             }
             
             if (_rtsp != nil)
