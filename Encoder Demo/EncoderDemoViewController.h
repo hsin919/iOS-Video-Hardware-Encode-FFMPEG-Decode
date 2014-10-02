@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface EncoderDemoViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIImageView *decodeView;
 @property (strong, nonatomic) IBOutlet UIImageView *cameraView;
 @property (strong, nonatomic) IBOutlet UILabel *serverAddress;
 

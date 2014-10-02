@@ -36,16 +36,17 @@
 - (void)show:(NSNotification *)notification
 {
     //NSDictionary *userInfo = [notification userInfo];
+    
     UIImage *image = [notification object];
     if(![NSThread isMainThread])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            cameraView.image = image;
+            _decodeView.image = image;
         });
     }
     else
     {
-        cameraView.image = image;
+        _decodeView.image = image;
     }
 }
 
@@ -56,7 +57,7 @@
     preview.frame = self.cameraView.bounds;
     [[preview connection] setVideoOrientation:UIInterfaceOrientationPortrait];
     
-    //[self.cameraView.layer addSublayer:preview];
+    [self.cameraView.layer addSublayer:preview];
     
     self.serverAddress.text = [[CameraServer server] getURL];
 }
