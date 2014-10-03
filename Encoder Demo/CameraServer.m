@@ -124,6 +124,7 @@ static CameraServer* theServer;
         // create capture device with video input
         _session = [[AVCaptureSession alloc] init];
         AVCaptureDevice* dev = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        
         AVCaptureDeviceInput* input = [AVCaptureDeviceInput deviceInputWithDevice:dev error:nil];
         [_session addInput:input];
         
@@ -136,6 +137,33 @@ static CameraServer* theServer;
                                         nil];
         _output.videoSettings = setcapSettings;
         [_session addOutput:_output];
+        
+        if([dev isTorchModeSupported:AVCaptureTorchModeOn]) {
+            [dev lockForConfiguration:nil];
+            //configure frame rate
+            [dev setActiveVideoMaxFrameDuration:CMTimeMake(1, 10)];
+            [dev setActiveVideoMinFrameDuration:CMTimeMake(1, 10)];
+            [dev unlockForConfiguration];
+        }
+        else
+        {
+            AVCaptureConnection *conn = [_output connectionWithMediaType:AVMediaTypeVideo];
+            
+            CMTimeShow(conn.videoMinFrameDuration);
+            CMTimeShow(conn.videoMaxFrameDuration);
+            
+            if (conn.isVideoMinFrameDurationSupported)
+                conn.videoMinFrameDuration = CMTimeMake(1, 10);
+            if (conn.isVideoMaxFrameDurationSupported)
+                conn.videoMaxFrameDuration = CMTimeMake(1, 10);
+            
+            CMTimeShow(conn.videoMinFrameDuration);
+            CMTimeShow(conn.videoMaxFrameDuration);
+        }
+        AVCaptureConnection *conn = [_output connectionWithMediaType:AVMediaTypeVideo];
+        if ([conn isVideoOrientationSupported]) {
+            conn.videoOrientation = AVCaptureVideoOrientationPortrait;
+        }
         
         [self initFFMPEG];
         
