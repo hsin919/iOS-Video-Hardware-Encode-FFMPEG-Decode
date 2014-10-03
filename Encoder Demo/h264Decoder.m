@@ -374,8 +374,6 @@ static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *
         return DECODE_NOT_INIT;
     }
     
-    static int fakeindex = 1;
-    
     NSMutableData *nalData = [[NSMutableData alloc] init];
     const uint8_t *tempBytes = srcframeData.bytes;
     if(tempBytes[0] == 0x00 &&
@@ -397,12 +395,10 @@ static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *
     _packet.data = (uint8_t*)[nalData bytes];
     _packet.size = [nalData length];
     _packet.stream_index = 0;
-    _packet.pts = fakeindex;
-    _packet.dts = fakeindex;
+    _packet.pts = 0;
+    _packet.dts = 0;
     _packet.duration = 0;
-    
-    fakeindex++;
-	
+
 	int frameFinished = 0;
     //NSLog(@"DEBUG_H264CRASH codeCtx decodeFrame %p", codecCtx);
     
