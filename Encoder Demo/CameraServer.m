@@ -44,6 +44,16 @@ static CameraServer* theServer;
     return theServer;
 }
 
+- (void)rtspHandler:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSData *rtpData = [userInfo objectForKey:DATA];
+    if([rtpData length] > 0)
+    {
+        NSLog(@"try decode rtp data length :%lu", (unsigned long)[rtpData length]);
+        [self previewImage:rtpData];
+    }
+}
+
 - (void)initFilePath:(NSString *)frameFilePath
 {
     NSError *_error = nil;
@@ -90,7 +100,6 @@ static CameraServer* theServer;
 
 - (void)previewImage:(NSData *)frame
 {
-    static int frameCount = 0;
     NSMutableDictionary *info =[NSMutableDictionary dictionaryWithCapacity:1];
     UIImage *decodeImage = nil;
     
@@ -176,7 +185,7 @@ static CameraServer* theServer;
             {
                 // EXP_FILE
                 //[self writeImageDataToFile:frame];
-                [self previewImage:frame];
+                //[self previewImage:frame];
             }
             
             if (_rtsp != nil)
@@ -187,6 +196,10 @@ static CameraServer* theServer;
             }
             return 0;
         } onParams:^int(NSData *data) {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(rtspHandler:)
+                                                         name:RTPDATA
+                                                       object:nil];
             // _avcC 用在這邊
             // 也可以[P2P] 抽換成 P2P hole punching 流程 (顯示 UI)
             _rtsp = [RTSPServer setupListener:data];

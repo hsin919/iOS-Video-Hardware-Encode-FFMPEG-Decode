@@ -96,6 +96,13 @@ static void onSocket (
     CFRunLoopAddSource(CFRunLoopGetMain(), rls, kCFRunLoopCommonModes);
     CFRelease(rls);
     
+    RTSPClientConnection* conn = [[RTSPClientConnection alloc] init];
+    if (conn != nil)
+    {
+        NSLog(@"Client connected");
+        [_connections addObject:conn];
+        
+    }
     return self;
 }
 

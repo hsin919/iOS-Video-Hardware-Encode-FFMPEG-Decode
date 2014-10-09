@@ -396,13 +396,7 @@ static void onRTCP(CFSocketRef s,
 
 - (void) onVideoData:(NSArray*) data time:(double) pts
 {
-    @synchronized(self)
-    {
-        if (_state != Playing)
-        {
-            return;
-        }
-    }
+    
     
     const int rtp_header_size = 12;
     const int max_single_packet = max_packet_size - rtp_header_size;
@@ -509,6 +503,11 @@ static void onRTCP(CFSocketRef s,
 {
     @synchronized(self)
     {
+        NSLog(@"%s", __FUNCTION__);
+        NSData *decodeData = [NSData dataWithBytes:packet length:cBytes];
+        NSMutableDictionary *info =[NSMutableDictionary dictionaryWithCapacity:1];
+        [info setObject:decodeData  forKey:DATA];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RTPDATA object:self userInfo:info];
         if (_sRTP)
         {
             CFDataRef data = CFDataCreate(nil, packet, cBytes);

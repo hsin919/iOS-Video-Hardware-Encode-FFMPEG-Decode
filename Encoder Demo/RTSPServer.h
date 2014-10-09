@@ -11,6 +11,9 @@
 #include <sys/socket.h> 
 #include <netinet/in.h>
 
+#define RTPDATA @"RTPDATA"
+#define DATA @"DATA"
+
 @interface RTSPServer : NSObject
 
 
