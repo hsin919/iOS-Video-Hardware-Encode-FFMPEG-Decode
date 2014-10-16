@@ -376,6 +376,15 @@ static void avStreamFPSTimeBase(AVStream *st, CGFloat defaultTimeBase, CGFloat *
     
     NSMutableData *nalData = [[NSMutableData alloc] init];
     const uint8_t *tempBytes = srcframeData.bytes;
+    if(((tempBytes[4] & 0x1F) == 5) || ((tempBytes[4] & 0x1F) == 7) || ((tempBytes[4] & 0x1F) == 8))
+    {
+        NSLog(@"HBR , h264 i-Frame");
+    }
+    else
+    {
+        NSLog(@"HBR , h264 other-Frame");
+    }
+    
     if(tempBytes[0] == 0x00 &&
        tempBytes[1] == 0x00 &&
        tempBytes[2] == 0x00 &&

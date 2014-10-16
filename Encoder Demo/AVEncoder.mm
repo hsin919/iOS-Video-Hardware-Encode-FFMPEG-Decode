@@ -568,6 +568,7 @@ static unsigned int to_host(unsigned char* p)
 //    NAL_PRIORITY_LOW        = 1
 //    NAL_PRIORITY_HIGH       = 2
 //    NAL_PRIORITY_HIGHEST    = 3
+    /*
     for (NSData* d in _pendingNALU)
     {
         NALUnit nal((const BYTE*)[d bytes], (int)[d length]);
@@ -575,7 +576,7 @@ static unsigned int to_host(unsigned char* p)
         {
             break;
         }
-    }
+    }*/
     
     if (poc == 0)
     {
