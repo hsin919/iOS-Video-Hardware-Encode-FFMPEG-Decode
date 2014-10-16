@@ -38,7 +38,7 @@
                                     @NO, AVVideoAllowFrameReorderingKey,
                                AVVideoProfileLevelH264High41, AVVideoProfileLevelKey,
                                AVVideoH264EntropyModeCAVLC, AVVideoH264EntropyModeKey,
-                               @1, AVVideoMaxKeyFrameIntervalDurationKey,
+                               //@0.1, AVVideoMaxKeyFrameIntervalDurationKey,
                                nil],
                                     AVVideoCompressionPropertiesKey,
                               nil];
