@@ -185,7 +185,7 @@ static CameraServer* theServer;
             {
                 // EXP_FILE
                 //[self writeImageDataToFile:frame];
-                //[self previewImage:frame];
+                [self previewImage:frame];
             }
             
             if (_rtsp != nil)
@@ -196,10 +196,11 @@ static CameraServer* theServer;
             }
             return 0;
         } onParams:^int(NSData *data) {
+            /*
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(rtspHandler:)
                                                          name:RTPDATA
-                                                       object:nil];
+                                                       object:nil];*/
             // _avcC 用在這邊
             // 也可以[P2P] 抽換成 P2P hole punching 流程 (顯示 UI)
             _rtsp = [RTSPServer setupListener:data];
