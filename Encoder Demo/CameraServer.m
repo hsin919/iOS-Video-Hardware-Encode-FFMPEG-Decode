@@ -145,6 +145,7 @@ static CameraServer* theServer;
                                         [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange], kCVPixelBufferPixelFormatTypeKey,
                                         nil];
         _output.videoSettings = setcapSettings;
+        
         [_session addOutput:_output];
         
         if([dev isTorchModeSupported:AVCaptureTorchModeOn]) {

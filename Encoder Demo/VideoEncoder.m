@@ -34,12 +34,17 @@
                               AVVideoCodecH264, AVVideoCodecKey,
                               [NSNumber numberWithInt: width], AVVideoWidthKey,
                               [NSNumber numberWithInt:height], AVVideoHeightKey,
-                              //[NSDictionary dictionaryWithObjectsAndKeys:
-                              //      @YES, AVVideoAllowFrameReorderingKey, nil],
-                              //      AVVideoCompressionPropertiesKey,
+                              [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @NO, AVVideoAllowFrameReorderingKey,
+                               AVVideoProfileLevelH264High41, AVVideoProfileLevelKey,
+                               AVVideoH264EntropyModeCAVLC, AVVideoH264EntropyModeKey,
+                               @1, AVVideoMaxKeyFrameIntervalDurationKey,
+                               nil],
+                                    AVVideoCompressionPropertiesKey,
                               nil];
     // 利用 AVFundation encode
     _writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:settings];
+    
     _writerInput.expectsMediaDataInRealTime = YES;
     [_writer addInput:_writerInput];
 }
@@ -51,6 +56,9 @@
 
 - (BOOL) encodeFrame:(CMSampleBufferRef) sampleBuffer
 {
+    NSDictionary *test = [_writerInput.outputSettings objectForKey:AVVideoCompressionPropertiesKey];
+    
+    NSLog(@">>>>>>%@", [test objectForKey:AVVideoAllowFrameReorderingKey]);
     if (CMSampleBufferDataIsReady(sampleBuffer))
     {
         if (_writer.status == AVAssetWriterStatusUnknown)
