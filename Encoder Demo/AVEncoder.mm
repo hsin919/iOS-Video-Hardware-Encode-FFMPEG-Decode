@@ -245,6 +245,23 @@ static unsigned int to_host(unsigned char* p)
     return commandToSend;
 }
 
+-(NSData *)insertIStartBytes
+{
+    NSString *startBit = @"00 00 00 01";
+    startBit = [startBit stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSMutableData *commandToSend= [[NSMutableData alloc] init];
+    unsigned char whole_byte;
+    char byte_chars[3] = {'\0','\0','\0'};
+    for (int i = 0; i < ([startBit length] / 2); i++) {
+        byte_chars[0] = [startBit characterAtIndex:i*2];
+        byte_chars[1] = [startBit characterAtIndex:i*2+1];
+        whole_byte = strtol(byte_chars, NULL, 16);
+        [commandToSend appendBytes:&whole_byte length:1];
+    }
+    //NSLog(@"%@", commandToSend);
+    return commandToSend;
+}
+
 - (void) onParamsCompletion
 {
     // the initial one-frame-only file has been completed
@@ -272,7 +289,7 @@ static unsigned int to_host(unsigned char* p)
             data = [NSData dataWithBytes:avcC.pps()->Start() length:avcC.pps()->Length()];
             [header appendData:start];
             [header appendData:data];
-            [header appendData:start];
+            [header appendData:[self insertIStartBytes]];
             
             _paramsBlock(header);
         }
