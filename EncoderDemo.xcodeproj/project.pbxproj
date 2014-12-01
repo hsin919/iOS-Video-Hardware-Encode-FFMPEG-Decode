@@ -33,14 +33,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8412559C16A035E3001749D9 /* Encoder Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Encoder Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8412559C16A035E3001749D9 /* EncoderDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EncoderDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		841255A016A035E3001749D9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		841255A216A035E3001749D9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		841255A416A035E3001749D9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		841255A816A035E3001749D9 /* Encoder Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Encoder Demo-Info.plist"; sourceTree = "<group>"; };
+		841255A816A035E3001749D9 /* EncoderDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EncoderDemo-Info.plist"; sourceTree = "<group>"; };
 		841255AA16A035E3001749D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		841255AC16A035E3001749D9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		841255AE16A035E3001749D9 /* Encoder Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Encoder Demo-Prefix.pch"; sourceTree = "<group>"; };
+		841255AE16A035E3001749D9 /* EncoderDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EncoderDemo-Prefix.pch"; sourceTree = "<group>"; };
 		841255AF16A035E3001749D9 /* EncoderDemoAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncoderDemoAppDelegate.h; sourceTree = "<group>"; };
 		841255B016A035E3001749D9 /* EncoderDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EncoderDemoAppDelegate.m; sourceTree = "<group>"; };
 		841255B216A035E3001749D9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 		8412559D16A035E3001749D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8412559C16A035E3001749D9 /* Encoder Demo.app */,
+				8412559C16A035E3001749D9 /* EncoderDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,10 +139,10 @@
 		841255A716A035E3001749D9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				841255A816A035E3001749D9 /* Encoder Demo-Info.plist */,
+				841255A816A035E3001749D9 /* EncoderDemo-Info.plist */,
 				841255A916A035E3001749D9 /* InfoPlist.strings */,
 				841255AC16A035E3001749D9 /* main.m */,
-				841255AE16A035E3001749D9 /* Encoder Demo-Prefix.pch */,
+				841255AE16A035E3001749D9 /* EncoderDemo-Prefix.pch */,
 				841255B216A035E3001749D9 /* Default.png */,
 				841255B416A035E3001749D9 /* Default@2x.png */,
 				841255B616A035E3001749D9 /* Default-568h@2x.png */,
@@ -181,9 +181,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8412559B16A035E3001749D9 /* Encoder Demo */ = {
+		8412559B16A035E3001749D9 /* EncoderDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "Encoder Demo" */;
+			buildConfigurationList = 841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "EncoderDemo" */;
 			buildPhases = (
 				8412559816A035E3001749D9 /* Sources */,
 				8412559916A035E3001749D9 /* Frameworks */,
@@ -193,9 +193,9 @@
 			);
 			dependencies = (
 			);
-			name = "Encoder Demo";
+			name = EncoderDemo;
 			productName = "Encoder Demo";
-			productReference = 8412559C16A035E3001749D9 /* Encoder Demo.app */;
+			productReference = 8412559C16A035E3001749D9 /* EncoderDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -208,7 +208,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Geraint Davies";
 			};
-			buildConfigurationList = 8412559616A035E3001749D9 /* Build configuration list for PBXProject "Encoder Demo" */;
+			buildConfigurationList = 8412559616A035E3001749D9 /* Build configuration list for PBXProject "EncoderDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -220,7 +220,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8412559B16A035E3001749D9 /* Encoder Demo */,
+				8412559B16A035E3001749D9 /* EncoderDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -346,9 +346,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Encoder Demo/Encoder Demo-Prefix.pch";
-				INFOPLIST_FILE = "Encoder Demo/Encoder Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Encoder Demo/EncoderDemo-Prefix.pch";
+				INFOPLIST_FILE = "Encoder Demo/EncoderDemo-Info.plist";
+				PRODUCT_NAME = EncoderDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -357,9 +357,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Encoder Demo/Encoder Demo-Prefix.pch";
-				INFOPLIST_FILE = "Encoder Demo/Encoder Demo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Encoder Demo/EncoderDemo-Prefix.pch";
+				INFOPLIST_FILE = "Encoder Demo/EncoderDemo-Info.plist";
+				PRODUCT_NAME = EncoderDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -367,7 +367,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8412559616A035E3001749D9 /* Build configuration list for PBXProject "Encoder Demo" */ = {
+		8412559616A035E3001749D9 /* Build configuration list for PBXProject "EncoderDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				841255C116A035E3001749D9 /* Debug */,
@@ -376,7 +376,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "Encoder Demo" */ = {
+		841255C316A035E3001749D9 /* Build configuration list for PBXNativeTarget "EncoderDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				841255C416A035E3001749D9 /* Debug */,
