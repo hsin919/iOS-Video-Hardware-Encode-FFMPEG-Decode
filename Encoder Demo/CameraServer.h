@@ -14,6 +14,8 @@
 #import "AVFoundation/AVCaptureVideoPreviewLayer.h"
 #import "AVFoundation/AVMediaFormat.h"
 
+#define C4MI_NOTIFY_RECEIVEVIDEODATA @"C4MI_NOTIFY_RECEIVEVIDEODATA"
+
 @interface CameraServer : NSObject
 
 + (CameraServer*) server;
